@@ -5,23 +5,20 @@
 //Inclusion des librairies
 #include "EEPROM.h"
 #define byte unsigned char
-#define REGISTER_SIZE 6
 //Declaration du constructeur
-i2cRegister::i2cRegister()
+i2cRegister::i2cRegister(int RegisterSize)
 {
-  for(int i=0; i<REGISTER_SIZE; i++)
-  {
-    Registre[i] = new Key(i);
-  }
+  Registre = new Key[RegisterSize];
+  _RegisterSize = RegisterSize;
 }
 //Fonction qui enregistre une valeur dans un registre
-void i2cRegister::setOctet(byte registerAddr,byte MSB,byte LSB)
+void i2cRegister::setByte(byte registerAddr,byte MSB,byte LSB)
 {
   Registre[registerAddr]._MSB = MSB;
   Registre[registerAddr]._LSB = LSB;
 }
 //Fonction qui lit une valeur dans un registre
-void i2cRegister::getOctet(byte registerAddr,byte *val)
+void i2cRegister::getByte(byte registerAddr,byte *val)
 {
   val[0] = Registre[registerAddr]._MSB;
   val[1] = Registre[registerAddr]._LSB;
@@ -77,7 +74,7 @@ void i2cRegister::byteInt(int val, byte *res)
 //Fonction qui sauvegarde le registre sur l'EEPROM
 void i2cRegister::saveEEPROM()
 {
-  for(int i=0; i<2*REGISTER_SIZE; i++)
+  for(int i=0; i<2*_RegisterSize; i++)
   {
     EEPROM.write(i,Registre[i/2]._MSB);
     i++;
@@ -87,7 +84,7 @@ void i2cRegister::saveEEPROM()
 //Fonction qui restaure le registre depuis l'EEPROM
 void i2cRegister::readEEPROM()
 {
-  for(int i=0; i<2*REGISTER_SIZE; i++)
+  for(int i=0; i<2*_RegisterSize; i++)
   {
     Registre[i/2]._MSB = EEPROM.read(i);
     i++;

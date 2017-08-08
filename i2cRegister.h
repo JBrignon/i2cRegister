@@ -12,11 +12,11 @@ class i2cRegister
 {
   public :
     //Constructeur 
-    i2cRegister();
+    i2cRegister(int RegisterSize);
     //Fonction qui enregistre une valeur dans un registre
-    void setOctet(byte registerAddr,byte MSB,byte LSB);
+    void setByte(byte registerAddr,byte MSB,byte LSB);
     //Fonction qui lit une valeur dans un registre
-    void getOctet(byte registerAddr,byte *val);
+    void getByte(byte registerAddr,byte *val);
     //Fonction qui enregistre un float dans le registre
     void storeFloat(byte registerAddr, float val);
     //Fonction qui lit un float depuis le registre
@@ -37,9 +37,11 @@ class i2cRegister
     void saveEEPROM();
     //Fonction qui restaure le registre depuis l'EEPROM
     void readEEPROM();
+    //Taille du registre
+    int _RegisterSize;
   private : 
     //Declaration des variables private
-    Key Registre[REGISTER_SIZE];
+    Key* Registre;
 };
 #endif
 
